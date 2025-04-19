@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "6aaeLzIFIfeDObZEEDQKVanIiQzYC8lpka6uMfYDeKw=",
+  "Source": "HelpMyURL.Backend",
+  "BasePath": "_content/HelpMyURL.Backend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
