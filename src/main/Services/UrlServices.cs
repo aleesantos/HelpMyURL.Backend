@@ -1,48 +1,44 @@
 using Repository;
+using InterfaceService;
 using NanoidDotNet;
 using Model;
 
 namespace Service
 {
-    public class UrlServ
+    public class UrlService : IUrlService
     {
-        private UrlRepository _urlrepository;
-        private static readonly Random _random = new Random();
+        private readonly UrlRepository _urlRepository;        
 
-        public UrlServ(UrlRepository urlRepository)
+        public UrlService(UrlRepository urlRepository)
         {
-            _urlrepository = urlRepository;
+            _urlRepository = urlRepository;
         }
 
-        public static string GenerateRandomUrl()
+        public async Task<ModelUrl> ShortenUrlAsync(string originalUrl, string userId, CancellationToken ct)
         {
-            int length = _random.Next(5, 11);
-            return Nanoid.Generate(size: length);
-        }
+            if (string.IsNullOrWhiteSpace(originalUrl))
+                throw new ArgumentNullException("Original URL cannot be empty");
 
-        public ModelUrl ShortUrl(string UrlOriginal)
-        {
-            ModelUrl modelurl = new ModelUrl
+            var shortUrl = Nanoid.Generate(size: 8);
+
+            var modelUrl = new ModelUrl
             {
-                OriginalUrl = UrlOriginal,
-                ShortUrl = GenerateRandomUrl(),
-                UrlCreat = DateTime.Now
+                OriginalUrl = originalUrl,
+                ShortUrl = shortUrl,
+                UserId = userId,
+                UrlCreat = DateTime.UtcNow,
             };
 
-            _urlrepository.Add(modelurl);
-            _urlrepository.Save();
+            await _urlRepository.AddAsync(modelUrl, ct);
+            await _urlRepository.SaveChangesAsync(ct);
 
-            return modelurl;
+            return modelUrl;
         }
 
-        public ModelUrl GetOriginal(string shortUrl)
+        public async Task<string?> GetOriginalUrlAsync(string shortUrl, CancellationToken ct)
         {
-            var url = _urlrepository.FindOriginal(shortUrl);
-
-            if (url == null)
-                throw new KeyNotFoundException("URL does not exist in our records.");
-
-            return url;
+            var modelUrl = await _urlRepository.FindOriginalAsync(shortUrl, ct);
+            return modelUrl?.OriginalUrl;
         }
     }
 }

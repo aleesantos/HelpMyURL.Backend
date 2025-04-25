@@ -1,14 +1,14 @@
 using Context;
 using Microsoft.EntityFrameworkCore;
 using Repository;
-using IUrlRepository;
+using InterfaceRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IUrlRepo, UrlRepository>();
+builder.Services.AddScoped<IUrlRepository, UrlRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

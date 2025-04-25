@@ -1,10 +1,11 @@
 using Model;
 
-namespace IUrlRepository
+namespace InterfaceRepository
 {
-    public interface IUrlRepo
+    public interface IUrlRepository
     {
-        void Add(ModelUrl modelurl);
-        void Save();
+        Task AddAsync(ModelUrl modelUrl, CancellationToken ct);
+        Task SaveAsync(CancellationToken ct);
+        Task<ModelUrl?> FindOriginalAsync(string shortUrl, CancellationToken ct);
     }
 }

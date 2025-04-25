@@ -1,11 +1,11 @@
 using Context;
-using IUrlRepository;
+using InterfaceRepository;
 using Microsoft.EntityFrameworkCore;
 using Model;
 
 namespace Repository
 {
-    public class UrlRepository : IUrlRepo
+    public class UrlRepository : IUrlRepository
     {
 
         private readonly AppDbContext _context;
@@ -15,22 +15,24 @@ namespace Repository
             _context = context;
         }
 
-        public void Add(ModelUrl modelurl)
+        public async Task AddAsync(ModelUrl modelUrl, CancellationToken ct)
         {
-            _context.UrlTable.Add(modelurl);
+            await _context.UrlTable.AddAsync(modelUrl, ct);
         }
 
-        public void Save()
+        public async Task SaveChangesAsync(CancellationToken ct)
         {
-            _context.SaveChanges();    
+            await _context.SaveChangesAsync(ct);
         }
 
-        public ModelUrl? FindOriginal(string shortUrl)
+        public async Task<ModelUrl?> FindOriginalAsync(string shortUrl, CancellationToken ct)
         {
             if (string.IsNullOrWhiteSpace(shortUrl))
                 return null;
 
-            return _context.UrlTable.AsNoTracking().FirstOrDefault(url => url.ShortUrl == shortUrl);
+            return await _context.UrlTable.
+                AsNoTracking().
+                FirstOrDefaultAsync(url => url.ShortUrl == shortUrl, ct);
         }
     }
 }
