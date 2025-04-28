@@ -5,8 +5,15 @@ using InterfaceRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if(builder.Environment.IsDevelopment())
+{
+    DotNetEnv.Env.Load();
+}
+
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgreSQL");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IUrlRepository, UrlRepository>();
 

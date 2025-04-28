@@ -20,7 +20,7 @@ namespace Repository
             await _context.UrlTable.AddAsync(modelUrl, ct);
         }
 
-        public async Task SaveChangesAsync(CancellationToken ct)
+        public async Task SaveAsync(CancellationToken ct)
         {
             await _context.SaveChangesAsync(ct);
         }

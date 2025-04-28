@@ -30,7 +30,7 @@ namespace Service
             };
 
             await _urlRepository.AddAsync(modelUrl, ct);
-            await _urlRepository.SaveChangesAsync(ct);
+            await _urlRepository.SaveAsync(ct);
 
             return modelUrl;
         }

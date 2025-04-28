@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using Response;
+using System.ComponentModel.DataAnnotations;
 
 namespace Controllers
 {
@@ -8,23 +9,22 @@ namespace Controllers
     [Route("api/[controller]")]
     public class UrlController : ControllerBase
     {
-        private readonly UrlService _urlservice;
+        private readonly UrlService _urlService;
         private readonly ILogger<UrlController> _logger;
 
-        public UrlController(UrlService urlservice, ILogger<UrlController> logger)
+        public UrlController(UrlService urlService, ILogger<UrlController> logger)
         {
-            _urlservice = urlservice;
+            _urlService = urlService;
             _logger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatShotenUrl(
+        public async Task<IActionResult> CreateShortenUrl(
             [FromBody] UrlRequest request,
-            CancellationToken cancellationToken)
+            CancellationToken ct)
         {
-            if (string.IsNullOrWhiteSpace(request.UrlOriginal) ||
-               !Uri.TryCreate(request.UrlOriginal, UriKind.Absolute, out var uri) ||
-               (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttp))
+            if (!Uri.TryCreate(request.UrlOriginal, UriKind.Absolute, out var uri) ||
+               !(uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
             {
                 _logger.LogWarning("Invalid URL received: {Url}", request.UrlOriginal);
                 return BadRequest(new ProblemDetails
@@ -38,30 +38,60 @@ namespace Controllers
             try
             {
                 
-                var url = await _urlservice.ShortenUrlAsync(request.UrlOriginal, userId);
-                var baseurl = $"{Request.Scheme}://{Request.Host}/r/";
-                string urlRedirect = $"{baseurl}{_urlservice.ShortenUrlAsync}";
+                var shortenedUrl = await _urlService.ShortenUrlAsync(request.UrlOriginal, userId, ct);
+                
+                var urlRedirect = $"{Request.Scheme}://{Request.Host}/r/{shortenedUrl.ShortUrl}";
 
                 var response = new UrlResponse(
-                    url.Id,
-                    url.OriginalUrl,
+                    shortenedUrl.Id,
+                    shortenedUrl.OriginalUrl,
                     urlRedirect,
-                    url.UrlCreat
+                    shortenedUrl.UrlCreat
                     );
 
                 return Ok(response);
             }
-            catch
+            catch(Exception ex)
             {
-                return StatusCode(500, "Error generating shortened URL");
+                _logger.LogError(ex, "Error to short LINK");
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Internal error",
+                    Detail = "An error occurred while processing your request"
+                });
             }
-        }       
+        }
+
+        [HttpGet("r/{shortLink}")]
+        public async Task<IActionResult> RedirectToOriginal(
+            [FromRoute] string shortUrl,
+            CancellationToken ct)
+        {
+            try
+            {
+                var originalUrl = await _urlService.GetOriginalUrlAsync(shortUrl, ct);
+                if(string.IsNullOrEmpty(originalUrl))
+                {
+                    return NotFound(new ProblemDetails { Title = "Url not found" });
+                }
+
+                return Redirect(originalUrl);
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex, "Error to redirect");
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Internal error",
+                    Detail = "Error to redirect"
+                });
+            }
+        }
 
         private string GetOrCreateUserId()
         {
             if (Request.Cookies.TryGetValue("userId", out var userId))
-                return userId;
-            userId = Guid.NewGuid().ToString();
+                return userId;            
 
             userId = Guid.NewGuid().ToString();
             Response.Cookies.Append("userId", userId, new CookieOptions
@@ -71,38 +101,14 @@ namespace Controllers
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTimeOffset.UtcNow.AddDays(30)
             });
-        }
 
-        
-
-        
-
-        [HttpGet("ShortUrl")]
-        public IActionResult UrlRedirect(string shorturl)
-        {
-            try
-            {
-                var url = _urlservice.GetOriginal(shorturl);
-
-                if (url == null)
-                {
-                    return NotFound("Url not found");
-                }
-
-                return Redirect(url.OriginalUrl);
-            }
-            catch
-            {
-                return StatusCode(500, "Internal error while trying to redirect.");
-            }
-        }
+            return userId;
+        }              
     }
     
     public class UrlRequest
     {
         [Required]
         public string? UrlOriginal { get; set; }
-    }
-
-    
+    }    
 }
