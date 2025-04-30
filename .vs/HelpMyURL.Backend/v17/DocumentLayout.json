@@ -3,36 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|c:\\users\\leesa\\documents\\programacao\\projetos para portifolio\\helpmyurl\\backend\\helpmyurl.backend\\.dockerignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|solutionrelative:.dockerignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|c:\\users\\leesa\\documents\\programacao\\projetos para portifolio\\helpmyurl\\backend\\helpmyurl.backend\\dockerfile||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|solutionrelative:dockerfile||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|c:\\users\\leesa\\documents\\programacao\\projetos para portifolio\\helpmyurl\\backend\\helpmyurl.backend\\.env||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|solutionrelative:.env||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|c:\\users\\leesa\\documents\\programacao\\projetos para portifolio\\helpmyurl\\backend\\helpmyurl.backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|c:\\users\\leesa\\documents\\programacao\\projetos para portifolio\\helpmyurl\\backend\\helpmyurl.backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|c:\\users\\leesa\\documents\\programacao\\projetos para portifolio\\helpmyurl\\backend\\helpmyurl.backend\\src\\main\\services\\urlservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|solutionrelative:src\\main\\services\\urlservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|c:\\users\\leesa\\documents\\programacao\\projetos para portifolio\\helpmyurl\\backend\\helpmyurl.backend\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|c:\\users\\leesa\\documents\\programacao\\projetos para portifolio\\helpmyurl\\backend\\helpmyurl.backend\\.env.example||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|solutionrelative:.env.example||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|c:\\users\\leesa\\documents\\programacao\\projetos para portifolio\\helpmyurl\\backend\\helpmyurl.backend\\src\\main\\controller\\urlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BED5440E-D56D-BE90-929A-2ABD28CE50E9}|HelpMyURL.Backend.csproj|solutionrelative:src\\main\\controller\\urlcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,100 +30,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": ".dockerignore",
-              "DocumentMoniker": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\.dockerignore",
-              "RelativeDocumentMoniker": ".dockerignore",
-              "ToolTip": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\.dockerignore",
-              "RelativeToolTip": ".dockerignore",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-04-28T23:11:29.394Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Dockerfile",
-              "DocumentMoniker": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\Dockerfile",
-              "RelativeDocumentMoniker": "Dockerfile",
-              "ToolTip": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\Dockerfile",
-              "RelativeToolTip": "Dockerfile",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-04-28T23:10:19.63Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": ".env",
-              "DocumentMoniker": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\.env",
-              "RelativeDocumentMoniker": ".env",
-              "ToolTip": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\.env",
-              "RelativeToolTip": ".env",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAADKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-04-28T23:05:17.381Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": ".env.example",
-              "DocumentMoniker": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\.env.example",
-              "RelativeDocumentMoniker": ".env.example",
-              "ToolTip": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\.env.example",
-              "RelativeToolTip": ".env.example",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-04-28T21:31:11.239Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": ".gitignore",
-              "DocumentMoniker": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\.gitignore",
-              "RelativeDocumentMoniker": ".gitignore",
-              "ToolTip": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\.gitignore",
-              "RelativeToolTip": ".gitignore",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-04-28T21:29:58.955Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UrlServices.cs",
-              "DocumentMoniker": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\src\\main\\Services\\UrlServices.cs",
-              "RelativeDocumentMoniker": "src\\main\\Services\\UrlServices.cs",
-              "ToolTip": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\src\\main\\Services\\UrlServices.cs",
-              "RelativeToolTip": "src\\main\\Services\\UrlServices.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAwwCAAAAAvAAAAAAAAAA==",
+              "Title": "UrlController.cs",
+              "DocumentMoniker": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\src\\main\\Controller\\UrlController.cs",
+              "RelativeDocumentMoniker": "src\\main\\Controller\\UrlController.cs",
+              "ToolTip": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\src\\main\\Controller\\UrlController.cs",
+              "RelativeToolTip": "src\\main\\Controller\\UrlController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-28T20:29:24.748Z"
+              "WhenOpened": "2025-04-30T00:08:59.302Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-28T20:03:00.159Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\leesa\\Documents\\Programacao\\Projetos para portifolio\\HelpMyUrl\\backend\\HelpMyURL.Backend\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAwCMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-16T02:17:15.394Z",
               "EditorCaption": ""

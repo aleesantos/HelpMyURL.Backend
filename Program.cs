@@ -2,6 +2,7 @@ using Context;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using InterfaceRepository;
+using Microsoft.OpenApi.Writers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,24 @@ var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__Po
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        logger.LogInformation("Applying migrations...");
+        db.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Migration Fail");
+        throw;
+    }
+}
 
 builder.Services.AddScoped<IUrlRepository, UrlRepository>();
 
@@ -29,8 +48,6 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
-
-var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
