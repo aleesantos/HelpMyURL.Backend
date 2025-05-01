@@ -11,7 +11,12 @@ if(builder.Environment.IsDevelopment())
     DotNetEnv.Env.Load();
 }
 
-var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgreSQL");
+var connectionString = builder.Configuration.GetConnectionString("ConnectionStrings__PostgreSQL");
+
+if(string.IsNullOrEmpty(connectionString))
+{
+    throw new Exception("ConnectionString is not configurated");
+}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
