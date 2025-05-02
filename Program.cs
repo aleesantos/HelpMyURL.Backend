@@ -7,19 +7,18 @@ using System.Collections;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ==================== CONFIGURAÇÕES INICIAIS ====================
+// Configurações iniciais
 if (builder.Environment.IsDevelopment())
 {
     Console.WriteLine("Modo desenvolvimento - Carregando .env");
     Env.Load();
 }
 
-// ==================== CONFIGURAÇÃO DO BANCO DE DADOS ====================
+// Configuração do Banco de Dados
 var connectionString = builder.Configuration.GetConnectionString("PostgreSQL")
     ?? Environment.GetEnvironmentVariable("POSTGRESQL_CONNECTION_STRING")
     ?? Environment.GetEnvironmentVariable("ConnectionStrings__PostgreSQL");
 
-// Validação robusta da connection string
 if (string.IsNullOrEmpty(connectionString))
 {
     Console.WriteLine("Variáveis de ambiente disponíveis:");
@@ -28,36 +27,24 @@ if (string.IsNullOrEmpty(connectionString))
         Console.WriteLine($"{env.Key} = {env.Value}");
     }
 
-    throw new Exception("""
-        FALHA: ConnectionString não configurada corretamente. Verifique:
-        1. Variável 'POSTGRESQL_CONNECTION_STRING' no Railway
-        2. Arquivo .env em desenvolvimento (formato: POSTGRESQL_CONNECTION_STRING=Host=...;Port=...;...)
-        3. Formato esperado: Host=servidor;Port=5432;Database=nome_db;Username=usuario;Password=senha
-        String usada: """ + connectionString);
+    throw new Exception(
+        "FALHA: ConnectionString não configurada. Verifique:\n" +
+        "1. Variável 'POSTGRESQL_CONNECTION_STRING' no Railway\n" +
+        "2. Arquivo .env em desenvolvimento\n" +
+        "3. Formato: Host=...;Port=...;Database=...;Username=...;Password=...");
 }
 
-// Configuração do DbContext com tratamento de erros
+// Configuração do DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    try
+    Console.WriteLine($"Configurando banco de dados com: {connectionString[..50]}...");
+    options.UseNpgsql(connectionString, npgsqlOptions =>
     {
-        Console.WriteLine($"Configurando banco de dados com: {connectionString.Replace("Password=.*;", "Password=******;")}");
-        options.UseNpgsql(connectionString, npgsqlOptions =>
-        {
-            npgsqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(10),
-                errorCodesToAdd: null);
-        });
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"ERRO: Falha ao configurar o banco de dados. Detalhes: {ex.Message}");
-        throw;
-    }
+        npgsqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+    });
 });
 
-// ==================== CONFIGURAÇÃO DOS SERVIÇOS ====================
+// Serviços
 builder.Services.AddScoped<IUrlRepository, UrlRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -72,10 +59,9 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod());
 });
 
-// ==================== CONSTRUÇÃO DA APLICAÇÃO ====================
 var app = builder.Build();
 
-// ==================== APLICAÇÃO DE MIGRAÇÕES ====================
+// Migrações
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -84,14 +70,11 @@ using (var scope = app.Services.CreateScope())
     try
     {
         logger.LogInformation("Verificando migrações pendentes...");
-        var pendingMigrations = db.Database.GetPendingMigrations().ToList();
-
-        if (pendingMigrations.Any())
+        if (db.Database.GetPendingMigrations().Any())
         {
-            logger.LogInformation($"Migrações pendentes: {string.Join(", ", pendingMigrations)}");
             logger.LogInformation("Aplicando migrações...");
             db.Database.Migrate();
-            logger.LogInformation("Migrações aplicadas com sucesso!");
+            logger.LogInformation("Migrações concluídas!");
         }
         else
         {
@@ -100,18 +83,12 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, """
-            FALHA NA MIGRAÇÃO
-            ConnectionString usada: {ConnectionString}
-            Detalhes do erro: {ErrorMessage}
-            """,
-            connectionString.Replace("Password=.*;", "Password=******;"),
-            ex.Message);
+        logger.LogError(ex, "ERRO: Falha ao aplicar migrações");
         throw;
     }
 }
 
-// ==================== CONFIGURAÇÃO DO PIPELINE ====================
+// Pipeline
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
