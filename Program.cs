@@ -11,7 +11,7 @@ if(builder.Environment.IsDevelopment())
     DotNetEnv.Env.Load();
 }
 
-var connectionString = builder.Configuration.GetConnectionString("ConnectionStrings__PostgreSQL");
+var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
 
 if(string.IsNullOrEmpty(connectionString))
 {
