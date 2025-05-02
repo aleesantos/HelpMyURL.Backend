@@ -1,14 +1,22 @@
-# Build stage
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /app
-COPY *.csproj ./
+# Build stage (usando .NET 8.0 LTS para estabilidade)
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copia apenas o .csproj e restaura dependências
+COPY *.csproj .
 RUN dotnet restore
-COPY . ./
-RUN dotnet publish -c Release -o out
+
+# Copia o resto e publica
+COPY . .
+RUN dotnet publish -c Release -o /app/publish
 
 # Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build /app/out .
-EXPOSE 80
+
+# Copia apenas os arquivos publicados
+COPY --from=build /app/publish .
+ENV ASPNETCORE_URLS=http://*:$PORT
+
+EXPOSE $PORT
 ENTRYPOINT ["dotnet", "HelpMyURL.Backend.dll"]
