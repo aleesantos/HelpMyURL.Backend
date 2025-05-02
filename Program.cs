@@ -2,27 +2,26 @@ using Context;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using InterfaceRepository;
-using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsDevelopment())
-{
-    Env.Load();
-}
-
-var connectionString = builder.Configuration.GetConnectionString("PostgreSQL")
-    ?? Environment.GetEnvironmentVariable("ConnectionStrings__PostgreSQL");
+// Obtém a connection string APENAS do appsettings.json
+var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
 
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new Exception("ConnectionString is not configured");
+    throw new Exception("""
+        ConnectionString não configurada no appsettings.json. Verifique:
+        Formato esperado: 
+        "ConnectionStrings": {
+          "PostgreSQL": "Host=...;Port=...;Database=...;Username=...;Password=...;SSL Mode=Require;Trust Server Certificate=true"
+        }
+        """);
 }
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-// Movido para antes do app.Build()
 builder.Services.AddScoped<IUrlRepository, UrlRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
