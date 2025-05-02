@@ -3,78 +3,164 @@ using Microsoft.EntityFrameworkCore;
 using Repository;
 using InterfaceRepository;
 using DotNetEnv;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Http;
 using System.Collections;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurações iniciais
+// ==================== CONFIGURAÇÃO DE AMBIENTE ====================
 if (builder.Environment.IsDevelopment())
 {
-    Console.WriteLine("Modo desenvolvimento - Carregando .env");
-    Env.Load();
-}
-
-// Configuração do Banco de Dados
-var connectionString = builder.Configuration.GetConnectionString("PostgreSQL")
-    ?? Environment.GetEnvironmentVariable("POSTGRESQL_CONNECTION_STRING")
-    ?? Environment.GetEnvironmentVariable("ConnectionStrings__PostgreSQL");
-
-if (string.IsNullOrEmpty(connectionString))
-{
-    Console.WriteLine("Variáveis de ambiente disponíveis:");
-    foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+    Console.WriteLine("[MODO DESENVOLVIMENTO] Carregando variáveis do .env");
+    try
     {
-        Console.WriteLine($"{env.Key} = {env.Value}");
+        Env.Load();
     }
-
-    throw new Exception(
-        "FALHA: ConnectionString não configurada. Verifique:\n" +
-        "1. Variável 'POSTGRESQL_CONNECTION_STRING' no Railway\n" +
-        "2. Arquivo .env em desenvolvimento\n" +
-        "3. Formato: Host=...;Port=...;Database=...;Username=...;Password=...");
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[AVISO] Erro ao carregar .env: {ex.Message}");
+    }
 }
 
-// Configuração do DbContext
+// ==================== CONFIGURAÇÃO DO BANCO DE DADOS ====================
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgreSQL")
+    ?? throw new InvalidOperationException("""
+        ConnectionString não configurada. Verifique:
+        1. Variável 'ConnectionStrings__PostgreSQL' no Railway
+        2. Formato esperado: Host=...;Port=...;Database=...;Username=...;Password=...;SSL Mode=Require;Trust Server Certificate=true
+        """);
+
+// Validação adicional da connection string
+if (!connectionString.Contains("Host=") || !connectionString.Contains("Password="))
+{
+    throw new FormatException($"Formato inválido da ConnectionString: {connectionString[..50]}...");
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    Console.WriteLine($"Configurando banco de dados com: {connectionString[..50]}...");
     options.UseNpgsql(connectionString, npgsqlOptions =>
     {
-        npgsqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+        npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorCodesToAdd: null);
     });
 });
 
-// Serviços
+// ==================== CONFIGURAÇÃO DA API KEY ====================
+var apiKey = Environment.GetEnvironmentVariable("API_KEY")
+    ?? throw new InvalidOperationException("API_KEY não configurada");
+
+builder.Services.AddSingleton(new ApiKeyConfig { Key = apiKey });
+
+// ==================== CONFIGURAÇÃO DE SERVIÇOS ====================
 builder.Services.AddScoped<IUrlRepository, UrlRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options =>
+builder.Services.AddSwaggerGen(c =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy => policy
-            .WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod());
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "HelpMyURL API", Version = "v1" });
+
+    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Name = "X-API-KEY",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        In = ParameterLocation.Header,
+        Description = "Insira a API Key fornecida"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
+// ==================== CONFIGURAÇÃO CORS ====================
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("RailwayPolicy", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:3000",
+                "https://*.railway.app")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+// ==================== CONSTRUÇÃO DA APLICAÇÃO ====================
 var app = builder.Build();
 
-// Migrações
-using (var scope = app.Services.CreateScope())
+// ==================== MIGRAÇÕES DO BANCO DE DADOS ====================
+ApplyDatabaseMigrations(app);
+
+// ==================== MIDDLEWARE DE AUTENTICAÇÃO ====================
+app.Use(async (context, next) =>
 {
+    if (!context.Request.Path.StartsWithSegments("/swagger"))
+    {
+        if (!context.Request.Headers.TryGetValue("X-API-KEY", out var extractedApiKey))
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync("API Key não fornecida");
+            return;
+        }
+
+        if (!apiKey.Equals(extractedApiKey))
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync("API Key inválida");
+            return;
+        }
+    }
+
+    await next();
+});
+
+// ==================== CONFIGURAÇÃO DO PIPELINE ====================
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "HelpMyURL API v1");
+    c.ConfigObject.DisplayRequestDuration = true;
+});
+
+app.UseHttpsRedirection();
+app.UseCors("RailwayPolicy");
+app.MapControllers();
+
+app.Run();
+
+// ==================== MÉTODOS AUXILIARES ====================
+void ApplyDatabaseMigrations(WebApplication app)
+{
+    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
     try
     {
         logger.LogInformation("Verificando migrações pendentes...");
-        if (db.Database.GetPendingMigrations().Any())
+
+        var pendingMigrations = db.Database.GetPendingMigrations().ToList();
+        if (pendingMigrations.Any())
         {
-            logger.LogInformation("Aplicando migrações...");
+            logger.LogInformation($"Aplicando {pendingMigrations.Count} migrações...");
             db.Database.Migrate();
-            logger.LogInformation("Migrações concluídas!");
+            logger.LogInformation("Migrações aplicadas com sucesso!");
         }
         else
         {
@@ -83,16 +169,12 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "ERRO: Falha ao aplicar migrações");
+        logger.LogError(ex, "ERRO CRÍTICO: Falha ao aplicar migrações");
         throw;
     }
 }
 
-// Pipeline
-app.UseSwagger();
-app.UseSwaggerUI();
-app.UseHttpsRedirection();
-app.UseCors("AllowFrontend");
-app.MapControllers();
-
-app.Run();
+public class ApiKeyConfig
+{
+    public string Key { get; set; } = null!;
+}
