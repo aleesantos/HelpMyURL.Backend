@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HelpMyURL.Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e05ab76baa7c861c576833e8d5b1cb64612a65bb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+899b3ea583aeb1cfd5ce4e74abf4f8d1e238c15e")]
 [assembly: System.Reflection.AssemblyProductAttribute("HelpMyURL.Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HelpMyURL.Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
