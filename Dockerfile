@@ -1,5 +1,5 @@
-# Build stage (usando .NET 8.0 LTS para estabilidade)
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Build stage (usando .NET 9.0 LTS para estabilidade)
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
 # Copia apenas o .csproj e restaura dependências
