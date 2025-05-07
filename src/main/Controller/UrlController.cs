@@ -18,7 +18,7 @@ namespace Controllers
             _logger = logger;
         }
 
-        [HttpPost]
+        [HttpPost("{shorten}")]
         public async Task<IActionResult> CreateShortenUrl(
             [FromBody] UrlRequest request,
             CancellationToken ct)
