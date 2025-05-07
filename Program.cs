@@ -7,6 +7,7 @@ using Context;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using InterfaceRepository;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IUrlRepository, UrlRepository>();
+builder.Services.AddScoped<UrlService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
