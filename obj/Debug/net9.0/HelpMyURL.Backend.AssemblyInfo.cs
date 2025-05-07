@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HelpMyURL.Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e60084883d95dcb971d690259276586360e2b608")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9b8698b5c59d4384b5b54f3b4deba93958edc29a")]
 [assembly: System.Reflection.AssemblyProductAttribute("HelpMyURL.Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HelpMyURL.Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

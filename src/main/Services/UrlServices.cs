@@ -2,16 +2,17 @@ using Repository;
 using InterfaceService;
 using NanoidDotNet;
 using Model;
+using InterfaceRepository;
 
 namespace Service
 {
     public class UrlService : IUrlService
     {
-        private readonly UrlRepository _urlRepository;        
+        private readonly IUrlRepository _iurlRepository;        
 
         public UrlService(UrlRepository urlRepository)
         {
-            _urlRepository = urlRepository;
+            _iurlRepository = urlRepository;
         }
 
         public async Task<ModelUrl> ShortenUrlAsync(string originalUrl, string userId, CancellationToken ct)
@@ -29,15 +30,15 @@ namespace Service
                 UrlCreat = DateTime.UtcNow,
             };
 
-            await _urlRepository.AddAsync(modelUrl, ct);
-            await _urlRepository.SaveAsync(ct);
+            await _iurlRepository.AddAsync(modelUrl, ct);
+            await _iurlRepository.SaveAsync(ct);
 
             return modelUrl;
         }
 
         public async Task<string?> GetOriginalUrlAsync(string shortUrl, CancellationToken ct)
         {
-            var modelUrl = await _urlRepository.FindOriginalAsync(shortUrl, ct);
+            var modelUrl = await _iurlRepository.FindOriginalAsync(shortUrl, ct);
             return modelUrl?.OriginalUrl;
         }
     }
