@@ -29,9 +29,8 @@ if (string.IsNullOrEmpty(connectionString))
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddScoped<UrlRepository>();
 builder.Services.AddScoped<IUrlRepository, UrlRepository>();
-builder.Services.AddScoped<IUrlService, UrlService>();
+builder.Services.AddScoped<UrlService, UrlService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

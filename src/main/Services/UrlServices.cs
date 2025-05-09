@@ -8,11 +8,11 @@ namespace Service
 {
     public class UrlService : IUrlService
     {
-        private readonly IUrlRepository _iurlRepository;        
+        private readonly IUrlRepository _urlRepository;        
 
-        public UrlService(UrlRepository urlRepository)
+        public UrlService(IUrlRepository urlRepository)
         {
-            _iurlRepository = urlRepository;
+            _urlRepository = urlRepository;
         }
 
         public async Task<ModelUrl> ShortenUrlAsync(string originalUrl, string userId, CancellationToken ct)
@@ -30,15 +30,15 @@ namespace Service
                 UrlCreat = DateTime.UtcNow,
             };
 
-            await _iurlRepository.AddAsync(modelUrl, ct);
-            await _iurlRepository.SaveAsync(ct);
+            await _urlRepository.AddAsync(modelUrl, ct);
+            await _urlRepository.SaveAsync(ct);
 
             return modelUrl;
         }
 
         public async Task<string?> GetOriginalUrlAsync(string shortUrl, CancellationToken ct)
         {
-            var modelUrl = await _iurlRepository.FindOriginalAsync(shortUrl, ct);
+            var modelUrl = await _urlRepository.FindOriginalAsync(shortUrl, ct);
             return modelUrl?.OriginalUrl;
         }
     }
