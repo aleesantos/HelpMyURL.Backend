@@ -62,7 +62,7 @@ namespace Controllers
             }
         }
 
-        [HttpGet("r/{shortLink}")]
+        [HttpGet("r/{shortUrl}")]
         public async Task<IActionResult> RedirectToOriginal(
             [FromRoute] string shortUrl,
             CancellationToken ct)
