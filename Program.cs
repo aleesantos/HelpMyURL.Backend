@@ -1,8 +1,3 @@
-
-//PEDIR PRA SLA OQ EXPLICAR TD DPS E REFATORAR LOGO
-
-
-
 using Context;
 using Microsoft.EntityFrameworkCore;
 using Repository;
@@ -14,17 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Obtém a connection string APENAS do appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
-
-if (string.IsNullOrEmpty(connectionString))
-{
-    throw new Exception("""
-        ConnectionString não configurada no appsettings.json. Verifique:
-        Formato esperado: 
-        "ConnectionStrings": {
-          "PostgreSQL": "Host=...;Port=...;Database=...;Username=...;Password=...;SSL Mode=Require;Trust Server Certificate=true"
-        }
-        """);
-}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
