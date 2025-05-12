@@ -18,7 +18,7 @@ namespace Controllers
             _logger = logger;
         }
 
-        [HttpPost("{shorten}")]
+        [HttpPost("creat")]
         public async Task<IActionResult> CreateShortenUrl(
             [FromBody] UrlRequest request,
             CancellationToken ct)
@@ -39,7 +39,7 @@ namespace Controllers
             {
                 
                 var shortenedUrl = await _urlService.ShortenUrlAsync(request.UrlOriginal, userId, ct);
-                
+
                 var urlRedirect = $"{Request.Scheme}://{Request.Host}/r/{shortenedUrl.ShortUrl}";
 
                 var response = new UrlResponse(
@@ -62,7 +62,7 @@ namespace Controllers
             }
         }
 
-        [HttpGet("r/{shortUrl}")]
+        [HttpGet("{shortUrl}")]
         public async Task<IActionResult> RedirectToOriginal(
             [FromRoute] string shortUrl,
             CancellationToken ct)
