@@ -69,6 +69,8 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+
+app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();

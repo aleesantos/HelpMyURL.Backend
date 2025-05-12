@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("r")]
     public class UrlController : ControllerBase
     {
         private readonly UrlService _urlService;
