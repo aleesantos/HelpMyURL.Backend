@@ -13,6 +13,16 @@ var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://hmyurl.vercel.app")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddScoped<IUrlRepository, UrlRepository>();
 builder.Services.AddScoped<UrlService, UrlService>();
 builder.Services.AddControllers();
@@ -57,8 +67,9 @@ using (var scope = app.Services.CreateScope())
 app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+app.UseAuthorization();
+app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
