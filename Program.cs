@@ -7,7 +7,6 @@ using InterfaceService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Obtém a connection string APENAS do appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -28,15 +27,6 @@ builder.Services.AddScoped<UrlService, UrlService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontend",
-        policy => policy
-            .WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod());
-});
 
 var app = builder.Build();
 
@@ -62,7 +52,6 @@ using (var scope = app.Services.CreateScope())
         throw;
     }
 }
-
 
 app.UseRouting();
 app.UseSwagger();
